@@ -2,6 +2,8 @@ name: CI/CD to AWS ECS
 
 on:
   push:
+    paths:
+      - simulate-fe/**
     branches:
       - main  # Jalankan workflow saat ada push ke branch 'main'
 
