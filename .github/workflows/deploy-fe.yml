@@ -2,8 +2,6 @@ name: CI/CD to AWS ECS
 
 on:
   push:
-    paths:
-      - simulate-fe/**
     branches:
       - main  # Jalankan workflow saat ada push ke branch 'main'
 
@@ -21,6 +19,8 @@ jobs:
       - name: Log in to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+        with:
+          region: ${{ secrets.AWS_REGION }} # Pastikan region di-set di sini
 
       - name: Build, tag, and push image to ECR
         env:
