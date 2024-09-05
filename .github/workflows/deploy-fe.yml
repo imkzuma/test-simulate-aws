@@ -5,7 +5,7 @@ on:
     paths:
       - simulate-fe/**
     branches:
-      - main  # Jalankan workflow saat ada push ke branch 'main'
+      - main  
 
 jobs:
   build-and-deploy:
