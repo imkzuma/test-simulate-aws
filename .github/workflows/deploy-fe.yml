@@ -51,10 +51,10 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./fe-test
-          file: ./fe-test/Dockerfile
+          # my dockerfile in the fe-test folder
+          file: fe-test/Dockerfile
           push: true
-          tags: ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/fe-test:latest
+          tags: ghcr.io/${{ github.actor }}/kamus-bali-fe:latest
 
   deploy:
     runs-on: ubuntu-latest
