@@ -18,16 +18,16 @@ jobs:
       with:
         node-version: '20' # Sesuaikan dengan versi Node.js yang Anda gunakan
 
-    - name: change directory
-      run: cd fe-test
-
     - name: Install dependencies
+      working-directory: fe-test
       run: npm install
 
     - name: Build Next.js
+      working-directory: fe-test
       run: npm run build
 
     - name: Archive build files
+      working-directory: fe-test
       run: tar -czf nextjs-build.tar.gz .next package.json package-lock.json
 
     - name: Set up SSH
