@@ -1,23 +1,20 @@
-name: Deploy to EC2
+name: Kamus Bali FE CI/CD
 
 on:
   push:
-    branches:
-      - main 
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    name: Continous Deployment
+    needs: [docker-build]
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Set up SSH
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-    - name: Deploy to EC2
-      run: |
-        whoami 
+      - name: Deploy using SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          script: |
+            whoami
