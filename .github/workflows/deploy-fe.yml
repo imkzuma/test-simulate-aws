@@ -26,13 +26,13 @@ jobs:
       working-directory: fe-test
       run: npm run build
 
+    - name: List files and directories
+      working-directory: fe-test
+      run: ls -R
+
     - name: Archive build files
       working-directory: fe-test
-      run: tar -czf nextjs-build.tar.gz .next public package.json package-lock.json
-
-    - name: List files in build directory
-      working-directory: fe-test
-      run: ls -l
+      run: tar -czf nextjs-build.tar.gz .next package.json package-lock.json
 
     - name: Set up SSH
       uses: webfactory/ssh-agent@v0.5.3
