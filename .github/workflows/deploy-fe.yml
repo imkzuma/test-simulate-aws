@@ -28,11 +28,15 @@ jobs:
 
     - name: List files and directories
       working-directory: fe-test
-      run: ls -R
+      run: ls 
 
     - name: Archive build files
       working-directory: fe-test
       run: tar -czf nextjs-build.tar.gz .next package.json package-lock.json
+
+    - name: List files and directories after build
+      working-directory: fe-test
+      run: ls 
 
     - name: Set up SSH
       uses: webfactory/ssh-agent@v0.5.3
