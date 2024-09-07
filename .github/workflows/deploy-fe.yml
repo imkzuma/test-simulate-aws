@@ -48,13 +48,14 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and push
+      - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          content: fe-test
-          file: ./Dockerfile
+          context: fe-test  # Specify the directory containing the Dockerfile and application
+          file: fe-test/Dockerfile  # Path to the Dockerfile
           push: true
           tags: ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/fe-test:latest
+
   deploy:
     runs-on: ubuntu-latest
     name: Continous Deployment
@@ -63,9 +64,9 @@ jobs:
       - name: Deploy using SSH
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ~/fe-test
             docker compose -f docker-compose-fe-test.yml down &&
