@@ -28,13 +28,17 @@ jobs:
 
     - name: Archive build files
       working-directory: fe-test
-      run: tar -czf nextjs-build.tar.gz .next package.json package-lock.json
+      run: tar -czf nextjs-build.tar.gz .next public package.json package-lock.json
+
+    - name: List files in build directory
+      working-directory: fe-test
+      run: ls -l
 
     - name: Set up SSH
       uses: webfactory/ssh-agent@v0.5.3
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-        
+
     - name: Copy build files to server
       run: |
         scp -o StrictHostKeyChecking=no nextjs-build.tar.gz ${{ secrets.SSH_USER }}@${{ secrets.HOST }}:~/prototype/fe/
@@ -42,8 +46,8 @@ jobs:
     - name: Deploy to Ubuntu Server
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.HOST }} "
-          cd ~/prototype/fe/ &&
-          tar -xzf ~/nextjs-build.tar.gz &&
+          cd ~/prototype/fe &&
+          tar -xzf nextjs-build.tar.gz &&
           npm install --production &&
           pm2 stop nextjs-app || true &&
           pm2 start npm --name 'nextjs-app' -- start
