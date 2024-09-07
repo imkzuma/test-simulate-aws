@@ -50,7 +50,7 @@ jobs:
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         source: "fe-test/nextjs-build.tar.gz"
-        target: "~/prototype/fe/"
+        target: "~"
 
     - name: Deploy to Ubuntu Server
       run: |
