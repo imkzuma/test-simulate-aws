@@ -51,8 +51,9 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .  # Specify the directory containing the Dockerfile and application
-          file: fe-test/Dockerfile  # Path to the Dockerfile
+          working-directory: fe-test
+          context: .
+          file: ./Dockerfile
           push: true
           tags: ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/fe-test:latest
 
