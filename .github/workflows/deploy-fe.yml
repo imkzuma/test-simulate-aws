@@ -1,20 +1,47 @@
-name: Kamus Bali FE CI/CD
+name: Build and Deploy Next.js to Ubuntu Server
 
 on:
   push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
+    branches:
+      - main  # Jalankan workflow saat ada push ke branch main
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    name: Continous Deployment
-    needs: [docker-build]
+
     steps:
-      - name: Deploy using SSH
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          script: |
-            whoami
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20' # Sesuaikan dengan versi Node.js yang Anda gunakan
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build Next.js
+      run: npm run build
+
+    - name: Archive build files
+      run: tar -czf nextjs-build.tar.gz .next package.json package-lock.json
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        
+    - name: Copy build files to server
+      run: |
+        scp -o StrictHostKeyChecking=no nextjs-build.tar.gz ${{ secrets.SSH_USER }}@${{ secrets.HOST }}:~/prototype/fe/
+
+    - name: Deploy to Ubuntu Server
+      run: |
+        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.HOST }} "
+          cd ~/prototype/fe/ &&
+          tar -xzf ~/nextjs-build.tar.gz &&
+          npm install --production &&
+          pm2 stop nextjs-app || true &&
+          pm2 start npm --name 'nextjs-app' -- start
+        "
