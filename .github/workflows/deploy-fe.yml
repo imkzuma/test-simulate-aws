@@ -28,7 +28,7 @@ jobs:
 
     - name: List files and directories
       working-directory: fe-test
-      run: ls 
+      run: ls -l
 
     - name: Archive build files
       working-directory: fe-test
@@ -36,7 +36,7 @@ jobs:
 
     - name: List files and directories after build
       working-directory: fe-test
-      run: ls 
+      run: ls -l
 
     - name: Set up SSH
       uses: webfactory/ssh-agent@v0.5.3
@@ -50,7 +50,7 @@ jobs:
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         source: "fe-test/nextjs-build.tar.gz"
-        target: "~/prototype/fe/nextjs-build.tar.gz"
+        target: "~/prototype/fe/"
 
     - name: Deploy to Ubuntu Server
       run: |
