@@ -18,6 +18,9 @@ jobs:
       with:
         node-version: '20' # Sesuaikan dengan versi Node.js yang Anda gunakan
 
+    - name: change directory
+      run: cd fe-test
+
     - name: Install dependencies
       run: npm install
 
