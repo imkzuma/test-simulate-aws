@@ -55,8 +55,9 @@ jobs:
     - name: Deploy to Ubuntu Server
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.HOST }} "
-          cd ~/prototype/fe &&
+          cd ~ &&
           tar -xzf nextjs-build.tar.gz &&
+          cd fe-test &&
           npm install --production &&
           pm2 stop nextjs-app || true &&
           pm2 start npm --name 'nextjs-app' -- start
