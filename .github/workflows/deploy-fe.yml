@@ -52,12 +52,11 @@ jobs:
         source: "fe-test/nextjs-build.tar.gz"
         target: "~"
 
-    - name: Deploy to Ubuntu Server
+    - name: Deploy to Ubuntu Server with SSH
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.HOST }} "
-          cd ~ &&
+          cd ~/fe-test &&
           tar -xzf nextjs-build.tar.gz &&
-          cd fe-test &&
           npm install --production &&
           pm2 stop nextjs-app || true &&
           pm2 start npm --name 'nextjs-app' -- start
